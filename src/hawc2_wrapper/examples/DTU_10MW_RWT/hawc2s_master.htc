@@ -1,0 +1,344 @@
+begin new_htc_structure;
+begin main_body ;
+  name        tower ;
+  type        timoschenko ;
+  nbodies     1 ;
+  node_distribution     c2_def ;
+  damping_posdef     0.000444 0.000444 0.00046 0.00063 0.00063 0.00045 ;
+  begin timoschenko_input;
+    filename data/DTU_10MW_RWT_Tower_st.dat ;
+    set 1 1 ;
+  end timoschenko_input;
+  begin c2_def;
+    nsec 10;
+    sec 1  0.000000 0.000000 0.000000 0.000000;
+    sec 2  0.000000 0.000000 -12.847778 0.000000;
+    sec 3  0.000000 0.000000 -25.695556 0.000000;
+    sec 4  0.000000 0.000000 -38.543333 0.000000;
+    sec 5  0.000000 0.000000 -51.391111 0.000000;
+    sec 6  0.000000 0.000000 -64.238889 0.000000;
+    sec 7  0.000000 0.000000 -77.086667 0.000000;
+    sec 8  0.000000 0.000000 -89.934444 0.000000;
+    sec 9  0.000000 0.000000 -102.782222 0.000000;
+    sec 10  0.000000 0.000000 -115.630000 0.000000;
+  end c2_def;
+end main_body;
+begin main_body ;
+  name        towertop ;
+  type        timoschenko ;
+  nbodies     1 ;
+  node_distribution     c2_def ;
+  damping_posdef     0.0075 0.0074 0.007 0.007 0.007 0.007 ;
+  concentrated_mass 2.0 0.0 2.687 0.30061 446040.0 4106000.0 410600.0 4106000.0 ;
+  begin timoschenko_input;
+    filename data/DTU_10MW_RWT_Towertop_st.dat ;
+    set 1 1 ;
+  end timoschenko_input;
+  begin c2_def;
+    nsec 2;
+    sec 1  0.000000 0.000000 0.000000 0.000000;
+    sec 2  0.000000 0.000000 -2.750000 0.000000;
+  end c2_def;
+end main_body;
+begin main_body ;
+  name        shaft ;
+  type        timoschenko ;
+  nbodies     1 ;
+  node_distribution     c2_def ;
+  damping_posdef     0.0 0.0 0.003983 0.000465 0.000465 0.003983 ;
+  concentrated_mass 1.0 0.0 0.0 0.0 0.0 0.0 0.0 3751000.0 ;
+  concentrated_mass 5.0 0.0 0.0 0.0 105520.0 0.0 0.0 325700.0 ;
+  begin timoschenko_input;
+    filename data/DTU_10MW_RWT_Shaft_st.dat ;
+    set 1 1 ;
+  end timoschenko_input;
+  begin c2_def;
+    nsec 5;
+    sec 1  0.000000 0.000000 0.000000 0.000000;
+    sec 2  0.000000 0.000000 1.775000 0.000000;
+    sec 3  0.000000 0.000000 3.550000 0.000000;
+    sec 4  0.000000 0.000000 5.325000 0.000000;
+    sec 5  0.000000 0.000000 7.100000 0.000000;
+  end c2_def;
+end main_body;
+begin main_body ;
+  name        hub1 ;
+  type        timoschenko ;
+  nbodies     1 ;
+  node_distribution     c2_def ;
+  damping_posdef     2e-05 2e-05 0.0002 3e-06 3e-06 2e-05 ;
+  begin timoschenko_input;
+    filename data/DTU_10MW_RWT_Hub_st.dat ;
+    set 1 1 ;
+  end timoschenko_input;
+  begin c2_def;
+    nsec 2;
+    sec 1  0.000000 0.000000 0.000000 0.000000;
+    sec 2  0.000000 0.000000 2.800000 0.000000;
+  end c2_def;
+end main_body;
+begin main_body ;
+  name           hub2 ;
+  copy_main_body hub1 ;
+end main_body;
+begin main_body ;
+  name           hub3 ;
+  copy_main_body hub1 ;
+end main_body;
+begin main_body ;
+  name        blade1 ;
+  type        timoschenko ;
+  nbodies     10 ;
+  node_distribution     c2_def ;
+  damping_posdef     0.0 0.0 0.0 0.00153 0.00255 0.00033 ;
+  begin timoschenko_input;
+    filename data/DTU_10MW_RWT_Blade_st.dat ;
+    set 1 1 ;
+  end timoschenko_input;
+  begin c2_def;
+    nsec 30;
+    sec 1  -0.000000 0.000070 0.000000 -14.500000;
+    sec 2  -0.008870 -0.008666 2.732452 -14.362770;
+    sec 3  0.020778 -0.030769 5.744942 -14.841965;
+    sec 4  -0.070335 -0.025770 9.036720 -14.323914;
+    sec 5  -0.258351 -0.008742 12.598863 -12.918919;
+    sec 6  -0.478967 -0.006427 16.413213 -11.070664;
+    sec 7  -0.666590 -0.035036 20.451864 -9.156580;
+    sec 8  -0.797693 -0.093340 24.677300 -7.443779;
+    sec 9  -0.858059 -0.173808 29.043315 -6.252899;
+    sec 10  -0.855738 -0.272563 33.496767 -5.526010;
+    sec 11  -0.817166 -0.391761 37.980018 -4.898072;
+    sec 12  -0.766884 -0.533209 42.433826 -4.057188;
+    sec 13  -0.713389 -0.694217 46.800491 -3.070887;
+    sec 14  -0.660149 -0.870213 51.026734 -2.119172;
+    sec 15  -0.609313 -1.057751 55.066214 -1.297814;
+    sec 16  -0.561385 -1.253712 58.881257 -0.593304;
+    sec 17  -0.516546 -1.454865 62.443832 0.020899;
+    sec 18  -0.475430 -1.657281 65.735697 0.562644;
+    sec 19  -0.439334 -1.857354 68.747880 1.038399;
+    sec 20  -0.409048 -2.051589 71.479650 1.453699;
+    sec 21  -0.384672 -2.237307 73.937125 1.814363;
+    sec 22  -0.364630 -2.412198 76.131803 2.126304;
+    sec 23  -0.344970 -2.574674 78.079087 2.395131;
+    sec 24  -0.323303 -2.723668 79.796928 2.626197;
+    sec 25  -0.298997 -2.858767 81.304672 2.824338;
+    sec 26  -0.272399 -2.980114 82.622118 2.993934;
+    sec 27  -0.244278 -3.088186 83.768813 3.138897;
+    sec 28  -0.215685 -3.183753 84.763506 3.262662;
+    sec 29  -0.188225 -3.267801 85.623811 3.368376;
+    sec 30  -0.089839 -3.336891 86.366000 3.428000;
+  end c2_def;
+end main_body;
+begin main_body ;
+  name           blade2 ;
+  copy_main_body blade1 ;
+end main_body;
+begin main_body ;
+  name           blade3 ;
+  copy_main_body blade1 ;
+end main_body;
+begin orientation ;
+  begin base ;
+    body tower ;
+    inipos 0.000000 0.000000 0.000000 ;
+    body_eulerang 0.000000 0.000000 0.000000 ;
+  end base ;
+  begin relative ;
+    body1 tower last;
+    body2 towertop 1;
+    body2_eulerang 0.000000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 towertop last;
+    body2 shaft 1;
+    body2_eulerang 90.000000 0.000000 0.000000 ;
+    body2_eulerang 5.000000 0.000000 0.000000 ;
+    body2_ini_rotvec_d1 0.000 0.000 -1.000 0.314 ;
+  end relative ;
+  begin relative ;
+    body1 shaft last;
+    body2 hub1 1;
+    body2_eulerang -90.000000 0.000000 0.000000 ;
+    body2_eulerang 0.000000 180.000000 0.000000 ;
+    body2_eulerang 2.500000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 shaft last;
+    body2 hub2 1;
+    body2_eulerang -90.000000 0.000000 0.000000 ;
+    body2_eulerang 0.000000 60.000000 0.000000 ;
+    body2_eulerang 2.500000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 shaft last;
+    body2 hub3 1;
+    body2_eulerang -90.000000 0.000000 0.000000 ;
+    body2_eulerang 0.000000 -60.000000 0.000000 ;
+    body2_eulerang 2.500000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 hub1 last;
+    body2 blade1 1;
+    body2_eulerang 0.000000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 hub2 last;
+    body2 blade2 1;
+    body2_eulerang 0.000000 0.000000 0.000000 ;
+  end relative ;
+  begin relative ;
+    body1 hub3 last;
+    body2 blade3 1;
+    body2_eulerang 0.000000 0.000000 0.000000 ;
+  end relative ;
+end orientation ;
+begin constraint ;
+  begin fix0 ;
+    body tower ;
+  end fix0 ;
+  begin fix1 ;
+    body1 tower last;
+    body2 towertop 1;
+  end fix1 ;
+  begin bearing1 ;
+    name shaft_rot ;
+    body1 towertop last;
+    body2 shaft 1;
+    bearing_vector 2 0.000 0.000 -1.000 ;
+  end bearing1 ;
+  begin fix1 ;
+    body1 shaft last;
+    body2 hub1 1;
+  end fix1 ;
+  begin fix1 ;
+    body1 shaft last;
+    body2 hub2 1;
+  end fix1 ;
+  begin fix1 ;
+    body1 shaft last;
+    body2 hub3 1;
+  end fix1 ;
+  begin bearing2 ;
+    name pitch1 ;
+    body1 hub1 last;
+    body2 blade1 1;
+    bearing_vector 2 0.000 0.000 -1.000 ;
+  end bearing2 ;
+  begin bearing2 ;
+    name pitch2 ;
+    body1 hub2 last;
+    body2 blade2 1;
+    bearing_vector 2 0.000 0.000 -1.000 ;
+  end bearing2 ;
+  begin bearing2 ;
+    name pitch3 ;
+    body1 hub3 last;
+    body2 blade3 1;
+    bearing_vector 2 0.000 0.000 -1.000 ;
+  end bearing2 ;
+end constraint ;
+end new_htc_structure;
+;---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+begin wind ;
+  density                 1.225 ;
+  wsp                     10.000   ;
+  tint                    0.000 ;
+  horizontal_input        1 ; 0=false, 1=true
+  windfield_rotations     0.000 0.000 0.000 ;
+  center_pos0             0.0 0.0 -119.000 ; hub height
+  shear_format            1 0.000 ;
+  turb_format             0     ;  0=none, 1=mann,2=flex
+  tower_shadow_method     0     ;  0=none, 1=potential flow, 2=jet
+;
+end wind;
+;
+begin aero ;
+  nblades  3 ;
+  hub_vec shaft -3 ;
+  link 1 mbdy_c2_def blade1 ;
+  link 2 mbdy_c2_def blade2 ;
+  link 3 mbdy_c2_def blade3 ;
+  ae_filename        ./data/DTU_10MW_RWT_ae.dat ;
+  pc_filename        ./data/DTU_10MW_RWT_pc.dat ;
+  induction_method   1 ; 0=none, 1=normal
+  aerocalc_method    1 ; 0=with aerodynamic, 1=without aerodynamic
+  aerosections       30 ;
+  ae_sets            1 1 1 ;
+  tiploss_method     1 ; 0=none, 1=prandtl
+  dynstall_method    2 ; 0=none, 1=stig oeye method,2=mhh method
+end aero ;
+;
+;-------------------------------------------------------------------------------------------------  
+;
+begin hawcstab2 ;
+    begin ground_fixed_substructure ;
+        main_body tower ;
+        main_body towertop ;
+        log_decrements 2.0 2.0 ; 
+    end ground_fixed_substructure ;
+    begin rotating_axissym_substructure ;
+        main_body shaft ;
+        ;log_decrements 25.0 32.0 ;
+    end rotating_axissym_substructure ;
+    begin rotating_threebladed_substructure ;
+        main_body hub1 ;
+        main_body blade1 ;
+        ;log_decrements 3.06859 3.00385 3.00481  5.49269  5.11904  7.38091 ;
+        second_order_actuator pitch1 100.000 0.900 ;
+    end rotating_threebladed_substructure ;
+    operational_data_filename data/DTU_10MW_RWT_hs2.opt ;
+    begin operational_data ;
+        windspeed 4.0 25.0 22 ; cut-in [m/s], cut-out [m/s], points [-]
+        genspeed 300.0 480 ; [rpm]
+        gearratio 50.0 ; [-]
+        minpitch 0.0 ; [deg.]
+        opt_lambda 7.5 ; [-]
+        maxpow 10638.3 ; [kW]
+        prvs_turbine 1 ; [-]
+        include_torsiondeform 1 ; [-];
+    end operational_data ;
+    begin controller_tuning ;
+        partial_load 0.050 0.700; fn [hz], zeta [-]
+        full_load 0.060 0.700 ; fn [hz], zeta [-]
+        gain_scheduling 2 ; 1 linear, 2 quadratic
+    end controller_tuning ;
+    ;
+    begin controller ;
+        begin input ;
+            constraint bearing1 shaft_rot ;
+            constraint bearing2 pitch1 collective ;
+            constraint bearing2 pitch1 cosine ;
+            constraint bearing2 pitch1 sine ;
+        end input ;
+        begin output ;
+            constraint bearing1 shaft_rot 1 only 2 ; 1
+            constraint bearing2 pitch1 1 only 1 collective ; 2
+            constraint bearing2 pitch1 1 only 1 cosine ; 3
+            constraint bearing2 pitch1 1 only 1 sine ; 4
+            mbdy momentvec hub1 1 2 hub1 only 1 collective ; 5
+            mbdy momentvec hub1 1 2 hub1 only 1 cosine ; 6
+            mbdy momentvec hub1 1 2 hub1 only 1 sine ; 7
+            mbdy momentvec tower 7 2 tower ; # yaw bearing ; 8,9,10
+            mbdy state pos towertop 1 0.0 global ; # 11,12,13, tower top displacement
+            mbdy momentvec shaft 1 2 shaft ; # main bearing ;	 14,15,16
+            mbdy momentvec tower 1 2 tower ; 17 18 19
+            mbdy momentvec hub1  1 2 hub1 only 2 collective ; 20
+            mbdy momentvec hub1  1 2 hub1 only 2 cosine ; 21
+            mbdy momentvec hub1  1 2 hub1 only 2 sine ; 22
+            mbdy momentvec blade1  1 2 blade1 only 3 collective ; 23
+            mbdy momentvec blade1  1 2 blade1 only 3 cosine ; 24
+            mbdy momentvec blade1  1 2 blade1 only 3 sine ; 25
+        end output ;
+    end controller ;
+    ;pi_pitch_controller 5200 1.2671 0.771100E+00 0.319309E+00 102.68665 754.18745 0.6 0.7 10 1;
+    compute_optimal_pitch_angle use_operational_data;
+    compute_steady_states bladedeform tipcorrect induction nogradients;
+    steady_state_convergence_limits 1e-6 1e4 0.02 1e-6 1e4 0 30 5 1e-9;
+    save_power;
+    save_induction;
+    ;compute_structural_modal_analysis nobladeonly 10;
+    ;compute_stability_analysis nomatrixwriteout noeigenvaluewriteout 15 0.6 0.5 0.1 0.01 modalsorting;
+    ;compute_controller_input;
+    ;save_ol_matrices;
+end hawcstab2 ;
+exit;

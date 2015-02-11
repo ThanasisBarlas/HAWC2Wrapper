@@ -1,0 +1,3 @@
+graft src/hawc2_wrapper/sphinx_build/html
+recursive-include src/hawc2_wrapper/test *.py
+
