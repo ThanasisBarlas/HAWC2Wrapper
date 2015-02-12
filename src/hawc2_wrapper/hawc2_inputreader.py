@@ -4,7 +4,8 @@
 from openmdao.main.api import Component, Container
 from openmdao.lib.datatypes.api import List
 from hawc2_inputdict import HAWC2InputDict, read_hawc2_st_file, \
-                              read_hawc2_pc_file, read_hawc2_ae_file
+                              read_hawc2_stKfull_file,read_hawc2_pc_file, \
+                              read_hawc2_ae_file
 from hawc2_vartrees import *
 
 
@@ -26,8 +27,6 @@ def stfile2beamvt(filename):
         sts.append(st)
 
     return sts
-
-
 class HAWC2InputReader(Component):
 
     htc_master_file = Str('hawc_master.htc')
@@ -35,7 +34,6 @@ class HAWC2InputReader(Component):
     vartrees = VarTree(HAWC2VarTrees(), iotype='out')
 
     def execute(self):
-
         self.dict = HAWC2InputDict()
         self.dict.read(self.htc_master_file)
         self.htc = self.dict.htc
@@ -275,6 +273,7 @@ class HAWC2InputReader(Component):
         b = HAWC2MainBody()
         b = self.set_entry(b, section, 'body_name', h2name='name',
                            required=True)
+
         copy = section.get_entry('copy_main_body')
         if copy is not None:
             b.copy_main_body = copy
@@ -285,19 +284,29 @@ class HAWC2InputReader(Component):
         b = self.set_entry(b, section, 'damping_posdef')
         b = self.set_entry(b, section, 'type')
 
-
         cm = section.get_entry('concentrated_mass')
         if cm is not None:
             if isinstance(cm[0], (int, float)):
                 cm = [cm]
             b.concentrated_mass = cm
         timo = section.get_entry('timoschenko_input')
-        stdic = read_hawc2_st_file(timo.get_entry('filename'))
-        for stset in stdic:
-            st = HAWC2BeamStructure()
-            for k, w in stset.iteritems():
-                setattr(st, k, w)
-            b.beam_structure.append(st)
+        st_type = timo.get_entry('becas')
+        if st_type is not None:
+            stdic = read_hawc2_stKfull_file(timo.get_entry('filename'))
+            b.st_input_type = st_type
+            for stset in stdic:
+                st = HAWC2BeamStructureFullK()
+                for k, w in stset.iteritems():
+                    setattr(st, k, w)
+                b.beam_structure.append(st)
+        else:
+            stdic = read_hawc2_st_file(timo.get_entry('filename'))
+            for stset in stdic:
+               st = HAWC2BeamStructure()
+               b.st_input_type = 0
+               for k, w in stset.iteritems():
+                   setattr(st, k, w)
+                   b.beam_structure.append(st)
         b.body_set = timo.get_entry('set')
         c2def = section.get_entry('c2_def')
         b.c12axis = np.array(c2def.get_entry('sec'))[:, 1:5]

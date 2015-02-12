@@ -211,6 +211,70 @@ def read_hawc2_st_file(filename):
     fid.close()
     return st_sets
 
+def read_hawc2_stKfull_file(filename):
+    """
+    Reader for a HAWC2 beam structure file. Each sectional input is defined
+    with 6X6 Constitutive Matrix.
+
+    The format of the file should be:
+    main_s[0] dm[1] x_cg[2] y_cg[3] ri_x[4] ri_y[5] 
+    K_1,1[6] K_1,2[7]  K_1,3[8]  K_1,4[9]  K_1,5[10] K_1,6[11]
+             K_2,2[12] K_2,3[13] K_2,4[14] K_2,5[15] K_2,6[16]
+                       K_3,3[17] K_3,4[18] K_3,5[19] K_3,6[20]
+                                 K_4,4[21] K_4,5[22] K_4,6[23]
+                                           K_5,5[24] K_5,6[25]
+                                                     K_6,6[26]
+    
+    First 5 columns are like a standard HAWC2_st input file. The other columns    
+    define the upper triangular part of the fully populated constitutive 
+    matrix for each section of the blade.    
+    
+    Sub-classes can overwrite this function to change the reader's behaviour.
+    """
+    fid = open(filename, 'r')
+    st_sets = [] 
+    line = fid.readline()
+    while line:
+        line = fid.readline()
+        if line.find('$') != -1:
+            ni = int(line.split()[1])
+            st_data = np.zeros((ni, 27))
+            for i in range(ni):
+                tmp = fid.readline().split()
+                st_data[i, :] = [float(tmp[j]) for j in range(27)]
+
+            st = {}
+            st['s'] = st_data[:, 0]
+            st['dm'] = st_data[:, 1]
+            st['x_cg'] = st_data[:, 2]
+            st['y_cg'] = st_data[:, 3]
+            st['ri_x'] = st_data[:, 4]
+            st['ri_y'] = st_data[:, 5]
+            st['K_11'] = st_data[:, 6]
+            st['K_12'] = st_data[:, 7]
+            st['K_13'] = st_data[:, 8]
+            st['K_14'] = st_data[:, 9]
+            st['K_15'] = st_data[:, 10]
+            st['K_16'] = st_data[:, 11]
+            st['K_22'] = st_data[:, 12]
+            st['K_23'] = st_data[:, 13]
+            st['K_24'] = st_data[:, 14]
+            st['K_25'] = st_data[:, 15]
+            st['K_26'] = st_data[:, 16]
+            st['K_33'] = st_data[:, 17]
+            st['K_34'] = st_data[:, 18]
+            st['K_35'] = st_data[:, 19]
+            st['K_36'] = st_data[:, 20]
+            st['K_44'] = st_data[:, 21]
+            st['K_45'] = st_data[:, 22]
+            st['K_46'] = st_data[:, 23]
+            st['K_55'] = st_data[:, 24]
+            st['K_56'] = st_data[:, 25]
+            st['K_66'] = st_data[:, 26]
+            st_sets.append(st)
+    fid.close()
+    return st_sets
+
 def read_hawc2_pc_file(filename):
     """Read a pc airfoil data file into a dictionary"""
 

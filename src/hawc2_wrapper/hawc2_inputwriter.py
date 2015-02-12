@@ -54,47 +54,91 @@ def write_aefile(path, b):
     fid.close()
 
 def write_stfile(path, body, case_id):
-    """write the beam structural data to an st_filename"""
 
-    header = ['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E',
-              'G', 'I_x', 'I_y', 'K', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e']
-    # for readable files with headers above the actual data column
-    exp_prec = 10             # exponential precesion
-    col_width = exp_prec + 8  # column width required for exp precision
-    header_full = '='*20*col_width + '\n'
-    header_full += ''.join([(hh + ' [%i]').center(col_width+1)%i for i, hh in enumerate(header)])+'\n'
-    header_full += '='*20*col_width + '\n'
+    """write the beam structural data to an st_filename"""
+    if body.st_input_type is 0:
+        header = ['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'x_sh', 'y_sh', 'E',
+                  'G', 'I_x', 'I_y', 'K', 'k_x', 'k_y', 'A', 'pitch', 'x_e', 'y_e']
+        # for readable files with headers above the actual data column
+        exp_prec = 10             # exponential precesion
+        col_width = exp_prec + 8  # column width required for exp precision
+        header_full = '='*20*col_width + '\n'
+        header_full += ''.join([(hh + ' [%i]').center(col_width+1)%i for i, hh in enumerate(header)])+'\n'
+        header_full += '='*20*col_width + '\n'
+    else:
+        header = ['r', 'm', 'x_cg', 'y_cg', 'ri_x', 'ri_y', 'K_11', 'K_12', 'K_13',
+                  'K_14', 'K_15', 'K_16', 'K_22', 'K_23', 'K_24', 'K_25', 'K_26',
+                  'K_33', 'K_34', 'K_35', 'K_36', 'K_44', 'K_45', 'K_46',
+                  'K_55', 'K_56', 'K_66']
+        # for readable files with headers above the actual data column
+        exp_prec = 10             # exponential precesion
+        col_width = exp_prec + 8  # column width required for exp precision
+        header_full = '='*29*col_width + '\n'
+        header_full += ''.join([(hh + ' [%i]').center(col_width+1)%i for i, hh in enumerate(header)])+'\n'
+        header_full += '='*29*col_width + '\n'
 
     fid = open(path, 'w')
     fid.write('1  number of sets, Nset\n' % body.body_set[1])
     fid.write('-----------------\n')
     fid.write('#1 written using the HAWC2 OpenMDAO wrapper\n')
     fid.write('Case ID: %s\n' % case_id)
-
-    for i, st in enumerate(body.beam_structure):
-        fid.write(header_full)
-        fid.write('$%i %i\n' % (i + 1, st.s.shape[0]))
-        data = np.array([st.s,
-                         st.dm,
-                         st.x_cg,
-                         st.y_cg,
-                         st.ri_x,
-                         st.ri_y,
-                         st.x_sh,
-                         st.y_sh,
-                         st.E,
-                         st.G,
-                         st.I_x,
-                         st.I_y,
-                         st.K,
-                         st.k_x,
-                         st.k_y,
-                         st.A,
-                         st.pitch,
-                         st.x_e,
-                         st.y_e]).T
-        np.savetxt(fid, data, fmt='%'+' %i.%ie' % (col_width, exp_prec) )
-    fid.close()
+    if body.st_input_type is 0:
+    	for i, st in enumerate(body.beam_structure):
+        	fid.write(header_full)
+        	fid.write('$%i %i\n' % (i + 1, st.s.shape[0]))
+        	data = np.array([st.s,
+                          st.dm,
+                	         st.x_cg,
+                          st.y_cg,
+                          st.ri_x,
+                          st.ri_y,
+    	                    st.x_sh,
+                          st.y_sh,
+                          st.E,
+                	         st.G,
+                          st.I_x,
+                          st.I_y,
+                          st.K,
+                          st.k_x,
+                          st.k_y,
+                          st.A,
+                	         st.pitch,
+                          st.x_e,
+                          st.y_e]).T
+        	np.savetxt(fid, data, fmt='%'+' %i.%ie' % (col_width, exp_prec) )
+    else:
+        for i, st in enumerate(body.beam_structure):
+            fid.write(header_full)
+            fid.write('$%i %i\n' % (i + 1, st.s.shape[0]))
+            data = np.array([st.s,
+                             st.dm,
+                             st.x_cg,
+                             st.y_cg,
+                             st.ri_x,
+                             st.ri_y,
+                             st.K_11,
+                             st.K_12,
+                             st.K_13,
+                             st.K_14,
+                             st.K_15,
+                             st.K_16,
+                             st.K_22,
+                             st.K_23,
+                             st.K_24,
+                             st.K_25,
+                             st.K_26,
+                             st.K_33,
+                             st.K_34,
+                             st.K_35,
+                             st.K_36,
+                             st.K_44,
+                             st.K_45,
+                             st.K_46,
+                             st.K_55,
+                             st.K_56,
+                             st.K_66]).T
+            np.savetxt(fid, data, fmt='%'+' %i.%ie' % (col_width, exp_prec) )
+	fid.close()
 
 class HAWC2InputWriter(Component):
 
@@ -480,6 +524,8 @@ class HAWC2InputWriter(Component):
                 main_bodies.append('  begin timoschenko_input;')
                 tmpname = ''.join([i for i in body.body_name if not i.isdigit()])
                 main_bodies.append('    filename %s ;' % (os.path.join(self.data_directory, self.case_id +'_'+ tmpname + '_st.dat')))
+                if body.st_input_type is not 0:
+                    main_bodies.append('    becas %d ;' % body.st_input_type)
                 main_bodies.append('    set %d %d ;' % (body.body_set[0], body.body_set[1]))
                 main_bodies.append('  end timoschenko_input;')
                 main_bodies.append('  begin c2_def;')
