@@ -63,6 +63,35 @@ class HAWC2BeamStructure(VariableTree):
     x_e = Array(desc='x-distance from main axis to center of elasticity', units='m')
     y_e = Array(desc='y-distance from main axis to center of elasticity', units='m')
 
+class HAWC2BeamStructureFullK(VariableTree):
+
+    s = Array(desc='Running curve length of beam', units='m')
+    dm = Array(desc='Mass per unit length', units='kg/m')
+    x_cg = Array(desc='x-distance from blade axis to center of mass', units='m')
+    y_cg = Array(desc='y-distance from blade axis to center of mass', units='m')
+    ri_x = Array(desc='radius of gyration relative to elastic center.', units='m')
+    ri_y = Array(desc='radius of gyration relative to elastic center', units='m')
+    K_11 = Array(desc='Element 1,1 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_12 = Array(desc='Element 1,2 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_13 = Array(desc='Element 1,3 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_14 = Array(desc='Element 1,4 of the Sectional Constitutive Matrix', units='N*m**2')    
+    K_15 = Array(desc='Element 1,5 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_16 = Array(desc='Element 1,6 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_22 = Array(desc='Element 2,2 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_23 = Array(desc='Element 2,3 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_24 = Array(desc='Element 2,4 of the Sectional Constitutive Matrix', units='N*m**2')    
+    K_25 = Array(desc='Element 2,5 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_26 = Array(desc='Element 2,6 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_33 = Array(desc='Element 3,3 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_34 = Array(desc='Element 3,4 of the Sectional Constitutive Matrix', units='N*m**2')    
+    K_35 = Array(desc='Element 3,5 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_36 = Array(desc='Element 3,6 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_44 = Array(desc='Element 4,4 of the Sectional Constitutive Matrix', units='N*m**2')    
+    K_45 = Array(desc='Element 4,5 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_46 = Array(desc='Element 4,6 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_55 = Array(desc='Element 5,5 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_56 = Array(desc='Element 5,6 of the Sectional Constitutive Matrix', units='N*m**2')
+    K_66 = Array(desc='Element 6,6 of the Sectional Constitutive Matrix', units='N*m**2')
 
 class HAWC2OrientationBase(VariableTree):
 
@@ -158,6 +187,7 @@ class HAWC2MainBody(VariableTree):
     body_name = Str('body')
     body_type = Str('timoschenko')
     st_filename = Str()
+    st_input_type = Int()
     beam_structure = List()
     body_set = List([1, 1], desc='Index of beam structure set to use from st file')
     nbodies = Int(1)
@@ -345,7 +375,6 @@ class HAWC2OutputListVT(VariableTree):
     sensor_list = List()
 
     def set_outputs(self, entries):
-
 
         for i, c in enumerate(entries):
             if c.name in ['filename', 'time', 'data_format', 'buffer']:
