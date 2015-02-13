@@ -956,8 +956,8 @@ class ComputeLoads(Component):
                 lc.Fx[i] = np.trapz(Fx[i:] + Fxmass[i:], load.s[i:]) * self.factor
                 lc.Fy[i] = np.trapz(Fy[i:] + Fymass[i:], load.s[i:]) * self.factor
                 lc.Fz[i] = np.trapz(acc[i:] * dm[i:], load.s[i:]) * self.factor
-                lc.Mx[i] = -np.trapz((Fy[i:] + Fymass[i:]) * load.s[i:], load.s[i:]) * self.factor
-                lc.My[i] = np.trapz((Fx[i:] + Fxmass[i:]) * load.s[i:], load.s[i:]) * self.factor
+                lc.Mx[i] = -np.trapz((Fy[i:] + Fymass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * self.factor
+                lc.My[i] = np.trapz((Fx[i:] + Fxmass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * self.factor
 
             self.lcs.append(lc.copy())
 
