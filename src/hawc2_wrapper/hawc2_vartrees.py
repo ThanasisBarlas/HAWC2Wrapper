@@ -371,7 +371,7 @@ class HAWC2AeroDragElement(VariableTree):
     mbdy_name = Str()
     dist = Str()
     nsec = Int()
-
+    sections = List()
 
 class HAWC2OutputListVT(VariableTree):
     
