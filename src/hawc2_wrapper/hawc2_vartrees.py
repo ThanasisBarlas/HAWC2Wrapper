@@ -71,6 +71,8 @@ class HAWC2BeamStructureFullK(VariableTree):
     y_cg = Array(desc='y-distance from blade axis to center of mass', units='m')
     ri_x = Array(desc='radius of gyration relative to elastic center.', units='m')
     ri_y = Array(desc='radius of gyration relative to elastic center', units='m')
+    x_e = Array(desc='x-distance from main axis to center of elasticity', units='m')
+    y_e = Array(desc='y-distance from main axis to center of elasticity', units='m')
     K_11 = Array(desc='Element 1,1 of the Sectional Constitutive Matrix', units='N*m**2')
     K_12 = Array(desc='Element 1,2 of the Sectional Constitutive Matrix', units='N*m**2')
     K_13 = Array(desc='Element 1,3 of the Sectional Constitutive Matrix', units='N*m**2')
@@ -192,7 +194,9 @@ class HAWC2MainBody(VariableTree):
     body_set = List([1, 1], desc='Index of beam structure set to use from st file')
     nbodies = Int(1)
     node_distribution = Str('c2_def')
+    damping_type = Str()
     damping_posdef = Array(np.zeros(6))
+    damping_aniso = Array(np.zeros(6))    
     copy_main_body = Str()
     c12axis = Array(desc='C12 axis containing (x_c12, y_c12, z_c12, twist)')
     concentrated_mass = List()
@@ -367,7 +371,6 @@ class HAWC2AeroDragElement(VariableTree):
     mbdy_name = Str()
     dist = Str()
     nsec = Int()
-    sections = List()
 
 
 class HAWC2OutputListVT(VariableTree):
