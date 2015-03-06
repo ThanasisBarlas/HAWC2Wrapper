@@ -281,7 +281,14 @@ class HAWC2InputReader(Component):
         b = self.set_entry(b, section, 'body_type', h2name='type')
         b = self.set_entry(b, section, 'nbodies')
         b = self.set_entry(b, section, 'node_distribution')
-        b = self.set_entry(b, section, 'damping_posdef')
+        
+        d_ani = section.get_entry('damping_aniso')
+        if d_ani is not None:
+            b.damping_aniso = d_ani
+            b.damping_type = 'ani'
+        else:
+            b = self.set_entry(b, section, 'damping_posdef')
+
         b = self.set_entry(b, section, 'type')
 
         cm = section.get_entry('concentrated_mass')
