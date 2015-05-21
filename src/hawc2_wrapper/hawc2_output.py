@@ -935,29 +935,35 @@ class ComputeLoads(Component):
                     setattr(lc, name, np.zeros(load.s.shape[0]))
             lc.s = load.s
             lc.case_id = lname
-
+            lc.Fxm = np.zeros(load.s.shape[0])
+            lc.Fym = np.zeros(load.s.shape[0])
             # rotate to local profile coordinate system
             pitch = self.oper.pitch[j] * np.pi / 180.
+            vhub = self.oper.vhub
             theta = np.interp(load.s, self.pf.s, self.pf.rot_z) * np.pi / 180.
             Fx =  load.Ft * np.cos(theta + pitch) + load.Fn * np.sin(theta + pitch)
             Fy =  load.Fn * np.cos(theta + pitch) - load.Ft * np.sin(theta + pitch)
 
             # compute contribution from mass
             dm = np.interp(load.s, self.beam_structure.s, self.beam_structure.dm)
-            Ftmass = np.array([np.trapz(self.g * dm[i:], load.s[i:]) \
-                                                for i in range(load.s.shape[0])])
-            Fxmass = Ftmass * np.cos(theta)
-            Fymass = Ftmass * np.sin(theta)
+            # Fmass = np.array([np.trapz(dm[i:], load.s[i:]) for i in range(load.s.shape[0])]) * 9.81
+            Fmass = dm * self.g
+            Fxmass = Fmass * np.cos(theta + pitch)
+            Fymass = Fmass * np.sin(theta + pitch)
 
-            # centrifugal acceleration a = (omega * r)**2 / r
-            acc = (self.oper.rpm[j] * 2 * np.pi / 60.)**2 * (load.s + self.hub_radius)
-
+            # centrifugal acceleration a = (omega * r)**2 / r + g
+            acc = (self.oper.rpm[j] * 2 * np.pi / 60.)**2 * (load.s + self.hub_radius) + self.g
+            lc.acc = acc
+            if vhub > 25.:
+                factor = 1.35
+            else:
+                factor = 1.1
             for i in range(load.s.shape[0]):
-                lc.Fx[i] = np.trapz(Fx[i:] + Fxmass[i:], load.s[i:]) * self.factor
-                lc.Fy[i] = np.trapz(Fy[i:] + Fymass[i:], load.s[i:]) * self.factor
-                lc.Fz[i] = np.trapz(acc[i:] * dm[i:], load.s[i:]) * self.factor
-                lc.Mx[i] = -np.trapz((Fy[i:] + Fymass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * self.factor
-                lc.My[i] = np.trapz((Fx[i:] + Fxmass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * self.factor
+                lc.Fx[i] = (np.trapz(Fx[i:] + Fxmass[i:], load.s[i:])) * factor
+                lc.Fy[i] = (np.trapz(Fy[i:] + Fymass[i:], load.s[i:])) * factor
+                lc.Fz[i] = np.trapz(acc[i:] * dm[i:], load.s[i:]) * factor
+                lc.Mx[i] = -np.trapz((Fy[i:] + Fxmass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * factor
+                lc.My[i] = np.trapz((Fx[i:] + Fymass[i:]) * (load.s[i:] - load.s[i]), load.s[i:]) * factor
 
             self.lcs.append(lc.copy())
 
