@@ -297,7 +297,12 @@ class HAWC2Aero(VariableTree):
     aerocalc_method = Enum(1, (0, 1), desc='BEM aero method, 0=none, 1=normal')
     aerosections = Int(30, desc='Number of BEM aerodynamic sections')
     tiploss_method = Enum(1, (0, 1), desc='BEM induction method, 0=none, 1=prandtl')
-    dynstall_method = Enum(2, (0, 1, 2), desc='BEM induction method, 0=none, 1=stig oeye method,2=mhh method')
+    dynstall_method = Enum(3, (0, 1, 2, 3), desc='BEM induction method, 0=none, 1=stig oeye method,2=mhh method,3=ATEFlap')   ### tkba: addition for flaps ###
+    atef_Ais = Array([0.00, 0.00, 0.00], desc='indicial response parameters for ATEFlap  - As')                               ### tkba: addition for flaps ###
+    atef_Bis = Array([0.0455, 0.30, 0.30], desc='indicial response parameters for ATEFlap  - Bs')                             ### tkba: addition for flaps ###
+    flap_in = Float(59.5925, desc='flap start (inboard)')                                                                     ### tkba: addition for flaps ###
+    flap_out = Float(85.5023, desc='flap end (outboard)')                                                                     ### tkba: addition for flaps ###
+    ds_filename = Str('Flap_dturwt1_Thk24')                                                                                   ### tkba: addition for flaps ###
     ae_sets = List([1, 1, 1])
     ae_filename = Str()
     pc_filename = Str()

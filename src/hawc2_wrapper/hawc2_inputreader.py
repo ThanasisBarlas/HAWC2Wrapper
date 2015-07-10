@@ -183,6 +183,11 @@ class HAWC2InputReader(Component):
         vt = self.set_entry(vt, section, 'aerocalc_method')
         vt = self.set_entry(vt, section, 'tiploss_method')
         vt = self.set_entry(vt, section, 'dynstall_method')
+        vt = self.set_entry(vt, section, 'begin dynstall_ateflap')      ### tkba: addition for flaps ###
+        vt = self.set_entry(vt, section, 'Ais')                         ### tkba: addition for flaps ###
+        vt = self.set_entry(vt, section, 'Bis')                         ### tkba: addition for flaps ###
+        vt = self.set_entry(vt, section, 'flap')                        ### tkba: addition for flaps ###
+        vt = self.set_entry(vt, section, 'end dynstall_ateflap')        ### tkba: addition for flaps ###
         vt = self.set_entry(vt, section, 'aerosections')
         vt = self.set_entry(vt, section, 'ae_filename')
         vt = self.set_entry(vt, section, 'pc_filename')

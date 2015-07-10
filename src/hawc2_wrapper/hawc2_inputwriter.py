@@ -171,7 +171,7 @@ class HAWC2InputWriter(Component):
         self.sensors = []
 
         self._nbodies = 0
-
+        self.basedir = os.getcwd()                        ### tkba: addition for flaps ###
         if not os.path.exists(self.data_directory):
             os.mkdir(self.data_directory)
 
@@ -468,7 +468,12 @@ class HAWC2InputWriter(Component):
         aero.append('  aerosections       %i ;' % self.vartrees.aero.aerosections)
         aero.append('  ae_sets            %s ;' % ' '.join(map(str, self.vartrees.aero.ae_sets)))
         aero.append('  tiploss_method     %i ; 0=none, 1=prandtl' % self.vartrees.aero.tiploss_method)
-        aero.append('  dynstall_method    %i ; 0=none, 1=stig oeye method,2=mhh method' % self.vartrees.aero.dynstall_method)
+        aero.append('  dynstall_method    %i ; 0=none, 1=stig oeye method,2=mhh method,3=ATEFlap' % self.vartrees.aero.dynstall_method)
+        aero.append('    begin dynstall_ateflap ; ')                                                                                                                                          ### tkba: addition for flaps ###
+        aero.append('     Ais   %1.2f   %1.2f   %1.2f ;' % (self.vartrees.aero.atef_Ais[0], self.vartrees.aero.atef_Ais[1], self.vartrees.aero.atef_Ais[2]))                                  ### tkba: addition for flaps ###
+        aero.append('     Bis   %1.4f   %1.2f   %1.2f ;' % (self.vartrees.aero.atef_Bis[0], self.vartrees.aero.atef_Bis[1], self.vartrees.aero.atef_Bis[2]))                                  ### tkba: addition for flaps ###
+        aero.append('     flap   %2.4f   %1.4f   ./%s/%s.ds ; Flap Sec: 1' % (self.vartrees.aero.flap_in, self.vartrees.aero.flap_out, self.data_directory, self.vartrees.aero.ds_filename))  ### tkba: addition for flaps ###
+        aero.append('    end dynstall_ateflap ; ')                                                                                                                                            ### tkba: addition for flaps ###
         aero.append('end aero ;')
 
         self.master.extend(aero)
@@ -973,6 +978,16 @@ class HAWC2InputWriter(Component):
 
         path = os.path.join(self.data_directory, self.case_id + '_ae.dat')
         write_aefile(path, self.vartrees.blade_ae)
+
+        ###### QUICK FIX: COPY DS FILE FROM TOP DATA FOLDER ###################
+        try:
+            import shutil        
+            self.source_path = os.path.join(self.basedir + '/data', self.vartrees.aero.ds_filename + '.ds')     ### tkba: addition for flaps ###  
+            self.destin_path = os.path.join(self.data_directory, self.vartrees.aero.ds_filename + '.ds')        ### tkba: addition for flaps ###          
+            shutil.copy (self.source_path, self.destin_path)                                                    ### tkba: addition for flaps ###
+        except:
+            pass
+        #######################################################################
 
     def write_stfile(self, body):
 
